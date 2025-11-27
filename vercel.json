@@ -7,15 +7,35 @@
       "maxDuration": 30
     }
   },
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/index.js" },
-    { "src": "/admin/(.*)", "dest": "/admin/$1" },
-    { "src": "/driver/(.*)", "dest": "/driver/$1" },
-    { "src": "/admin", "dest": "/admin/index.html" },
-    { "src": "/driver", "dest": "/driver/index.html" },
-    { "src": "/", "dest": "/driver/index.html" },
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/driver/$1" }
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/admin/(.*)",
+      "destination": "/admin/$1"
+    },
+    {
+      "source": "/driver/(.*)",
+      "destination": "/driver/$1"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin/index.html"
+    },
+    {
+      "source": "/driver",
+      "destination": "/driver/index.html"
+    },
+    {
+      "source": "/",
+      "destination": "/driver/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/driver/$1"
+    }
   ],
   "headers": [
     {
@@ -41,5 +61,7 @@
   ],
   "env": {
     "NODE_ENV": "production"
-  }
+  },
+  "cleanUrls": true,
+  "trailingSlash": false
 }
