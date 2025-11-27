@@ -1,0 +1,285 @@
+  :root{
+  color-scheme: dark;
+}
+
+/* Preline UI Modal Support - Ensure modals work with Tailwind CDN */
+.hs-overlay.hidden {
+  display: none !important;
+}
+
+.hs-overlay:not(.hidden) {
+  display: flex !important;
+  align-items: top;
+  justify-content: center;
+}
+
+/* Handle hs-overlay-open state for animations */
+.hs-overlay.hs-overlay-open > div:first-child {
+  margin-top: 1.75rem !important;
+  opacity: 1 !important;
+}
+
+.hs-overlay:not(.hs-overlay-open) > div:first-child {
+  opacity: 0;
+  margin-top: 0;
+}
+  /* Responsive font sizes */
+html{
+  font-size:14px; /* Desktop default */
+}
+  /* Mobile version (280-400px): font-size 10px */
+@media (max-width:400px){
+  html{
+    font-size:10px;
+  }
+}
+  /* Desktop version (>400px): font-size 14px */
+@media (min-width:401px){
+  html{
+    font-size:14px;
+  }
+}
+  html,body{
+  min-width:280px; /* Minimum width for mobile devices (280-400px range) */
+}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;margin:0;background:#0b1020;color:#e6edf3;transition:background .3s ease,color .3s ease}
+header{position:sticky;top:0;background:#0ea5e9;color:#00131f;padding:10px 16px;font-weight:700;display:flex;align-items:center;gap:10px;z-index:40}
+main{padding:16px;max-width:980px;margin:0 auto}
+.card{background:#0f172a;border:1px solid #1f2a44;border-radius:12px;padding:16px;margin:12px 0}
+button{background:#0ea5e9!important;border:0;color:#00131f;padding:1px 10px!important;border-radius:10px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background .2s ease,transform .2s ease}
+button:hover{background:#f3d30d!important;transform:translateY(-1px)}
+button:disabled{opacity:.6;cursor:not-allowed}
+button[style*="background:#dc2626"]{background:#dc2626!important;padding:1px 3px!important}
+button[style*="background:#dc2626"]:hover{background:#b91c1c!important;transform:translateY(-1px)}
+.menu-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.menu-header h2{margin:0}
+.icon-btn{width:36px;height:36px;padding:1px 3px!important;justify-content:center;background:#0ea5e9!important}
+.icon-btn:hover{background:#f3d30d!important;transform:translateY(-1px)}
+.icon-btn svg{width:18px;height:18px}
+.hamburger{background:#0ea5e9!important;border:0;width:40px;height:40px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;padding:1px 3px!important}
+.hamburger:hover{background:#f3d30d;transform:translateY(-1px)}
+.hamburger svg{width:22px;height:22px}
+.drawer{position:fixed;inset:0;pointer-events:none;z-index:50}
+.drawer .overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);opacity:0;transition:opacity .2s}
+.drawer .panel{position:absolute;top:0;left:0;height:100%;width:260px;background:#0f172a;border-right:1px solid #1f2a44;transform:translateX(-100%);transition:transform .2s;overflow-y:auto}
+.drawer .panel button{background:#0ea5e9!important;padding:1px 3px!important}
+.drawer .panel #btn-logout{background:#dc2626!important;padding:1px 3px!important}
+.drawer.open{pointer-events:auto}
+.drawer.open .overlay{opacity:1}
+.drawer.open .panel{transform:translateX(0)}
+body.login-active{overflow:hidden}
+#login-screen{position:fixed;inset:0;background:#4a4a4a;display:flex;align-items:center;justify-content:center;z-index:200;padding:16px}
+#login-screen.hidden{display:none}
+.login-card{width:100%;max-width:420px;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 20px 45px rgba(0,0,0,.45);display:flex;flex-direction:column}
+.login-header{
+  height:140px;
+  background:linear-gradient(135deg,#0f4c5c 0%,#1a5f6f 50%,#0d2b35 100%);
+  background-image:url('../images/logo.png');
+  background-size:contain;
+  background-position:center;
+  background-repeat:no-repeat;
+  position:relative;
+  overflow:hidden;
+  z-index:0
+}
+/* Fallback gradient overlay if logo image is not found - reduced opacity to show logo */
+.login-header::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,#0f4c5c 0%,#1a5f6f 50%,#0d2b35 100%);
+  z-index:0;
+  opacity:0.3
+}
+/* Optional: Subtle overlay for better logo visibility */
+.login-header::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at center,rgba(0,0,0,0.1) 0%,transparent 70%);
+  z-index:1;
+  pointer-events:none
+}
+.login-body{padding:32px 28px;display:flex;flex-direction:column;gap:20px;background:#ffffff}
+.login-card h2{margin:0 0 8px;text-align:center;font-size:24px;font-weight:700;color:#8b5cf6;text-transform:uppercase;letter-spacing:1px}
+.login-role-group{display:flex;gap:12px;justify-content:center;margin-bottom:8px}
+.login-role-btn{background:#2563eb!important;color:#ffffff;border:none;padding:10px 13px!important;border-radius:20px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s ease;flex:1;max-width:140px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.login-role-btn.active{background:#1e40af!important}
+.login-role-btn:not(.active){background:#3b82f6!important;opacity:0.8}
+.login-role-btn:hover{opacity:1;transform:translateY(-1px)}
+.login-role-btn .role-checkbox{width:18px;height:18px;cursor:pointer;accent-color:#ffffff;flex-shrink:0}
+.login-input-wrapper{position:relative;display:flex;align-items:center}
+.login-input-icon{position:absolute;left:12px;width:20px;height:20px;color:#9ca3af;pointer-events:none}
+.login-card label{display:flex;flex-direction:column;font-size:14px;gap:8px;color:#374151}
+.login-card input[type="text"],.login-card input[type="password"]{padding:12px 12px 12px 40px;border-radius:10px;border:1px solid #e5e7eb;background:#f3f4f6;color:#1f2937;font-size:14px;width:100%;box-sizing:border-box}
+/* Datalist dropdown styling for login name options */
+datalist#login-name-options{font-size:10px}
+datalist#login-name-options option{padding:3px 6px;font-size:10px;line-height:1.4;margin:3px 0}
+/* For browsers that support styling datalist dropdowns */
+input[list="login-name-options"]::-webkit-calendar-picker-indicator{font-size:10px}
+input[list="login-name-options"]::-webkit-list-button{font-size:10px}
+/* Additional styling for datalist dropdown */
+#login-name-options option{font-size:10px!important;padding:3px 6px!important;line-height:1.4!important;margin:3px 0!important}
+.login-card input[type="text"]:focus,.login-card input[type="password"]:focus{outline:none;border-color:#8b5cf6;background:#ffffff}
+.login-card input[type="text"]::placeholder,.login-card input[type="password"]::placeholder{color:#9ca3af}
+#login-submit{width:100%;background:#22c55e!important;color:#ffffff;border:none;padding:10px 13px!important;border-radius:10px;font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;cursor:pointer;transition:all .2s ease;margin-top:8px}
+#login-submit:hover:not(:disabled){background:#16a34a;transform:translateY(-1px);box-shadow:0 4px 12px rgba(34,197,94,.3)}
+#login-submit:disabled{opacity:.6;cursor:not-allowed}
+#login-status{min-height:18px;font-size:13px;color:#ef4444;text-align:center;margin-top:-8px}
+ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+li{background:#0b1225;border:1px solid #1f2a44;border-radius:10px;padding:10px}
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid #1f2a44;padding:6px 8px;text-align:left}
+#rows th,#rows td{font-size:14px}
+#rows button{font-size:1.3rem;display:inline-flex;align-items:center;justify-content:center;gap:4px;background:#0ea5e9!important;padding:1px 3px!important}
+#rows button:hover{background:#f3d30d!important}
+#rows button svg{width:16px;height:16px}
+.group-header{background:#1e293b;border-top:2px solid #0ea5e9;border-bottom:1px solid #334155}
+.group-header-cell{font-weight:700;color:#f8e409;text-align:left;padding:12px 8px;font-size:1.1rem}
+#buttons-container{display:flex;width:100%;border-bottom:1px solid #1f2a44}
+#status-buttons-section{padding:12px 16px;display:flex;gap:16px;flex-wrap:wrap;flex:1}
+#right-side-section{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 16px;min-width:200px}
+/* Toggle Switch Styles */
+.status-toggle-wrapper{display:flex;flex-direction:column;align-items:center;gap:3px}
+.status-toggle-label{position:relative;display:inline-block;width:60px;height:34px;cursor:pointer}
+.status-toggle-input{opacity:0;width:0;height:0}
+.status-toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#6b7280;transition:.3s;border-radius:34px}
+.status-toggle-slider:before{position:absolute;content:"";height:26px;width:26px;left:4px;bottom:4px;background-color:#ffffff;transition:.3s;border-radius:50%}
+.status-toggle-input:checked + .status-toggle-slider{background-color:#dc2626}
+.status-toggle-input:checked + .status-toggle-slider:before{transform:translateX(26px)}
+.status-toggle-input:disabled + .status-toggle-slider{opacity:0.6;cursor:not-allowed}
+.status-toggle-input:disabled:checked + .status-toggle-slider{background-color:#dc2626;opacity:0.8}
+.status-toggle-text{font-size:12px;text-align:center;color:#6b7280;white-space:nowrap;margin-top:0}
+.status-toggle-wrapper .status-toggle-input:checked ~ * + .status-toggle-text,
+.status-toggle-wrapper:has(.status-toggle-input:checked) .status-toggle-text{color:#dc2626;font-weight:600}
+.status-toggle-wrapper .status-toggle-input:disabled ~ * + .status-toggle-text,
+.status-toggle-wrapper:has(.status-toggle-input:disabled) .status-toggle-text{opacity:0.6}
+/* Stopwatch Timer Styles */
+#stopwatch-container{display:flex;flex-direction:column;align-items:center;gap:8px}
+.stopwatch-display{display:flex;gap:8px;align-items:center;justify-content:center}
+.stopwatch-box{display:flex;flex-direction:column;align-items:center;background:#1f2937;border:2px solid #374151;border-radius:8px;padding:8px 12px;min-width:60px}
+.stopwatch-number{font-size:24px;font-weight:700;color:#ffffff;font-variant-numeric:tabular-nums;line-height:1.2}
+.stopwatch-label{font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;margin-top:4px}
+.stopwatch-separator{font-size:24px;font-weight:700;color:#ffffff;padding:0 4px}
+.htx-action-button{background:#c80c94!important;border:0;color:#ffffff;padding:1px 3px!important;border-radius:8px;font-weight:600;font-size:10px;cursor:pointer;transition:background .2s ease,transform .2s ease;white-space:nowrap;width:100%}
+.htx-action-button:hover{background:#a00a7a!important;transform:translateY(-1px)}
+.htx-action-button.change-car{background:#e50b37!important}
+.htx-action-button.change-car:hover{background:#c0092d!important}
+.dropdown-list{max-height:200px;overflow-y:auto}
+.dropdown-option{padding:10px 12px;cursor:pointer;color:#e6edf3;border-bottom:1px solid #1f2a44;transition:background .2s ease}
+.dropdown-option:hover{background:#1f2a44}
+.dropdown-option:last-child{border-bottom:none}
+.dropdown-option.highlight{background:#0ea5e9;color:#00131f}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0ea5e9;color:#00131f;padding:12px 18px;border-radius:8px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:60}
+.toast.show{opacity:1;transform:translate(-50%,-6px)}
+.muted{opacity:.8}
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.5);padding:16px}
+.modal.open{display:flex}
+.modal-card{background:#0f172a;border:1px solid #1f2a44;border-radius:12px;max-width:720px;width:100%;max-height:80vh;overflow:auto}
+.modal-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #1f2a44}
+.modal-body{padding:16px}
+.kv{display:grid;grid-template-columns:200px 1fr;gap:8px;border-bottom:1px dashed #1f2a44;padding:6px 0}
+@media (max-width:768px){
+  header{padding:8px 12px;gap:8px}
+  header button{padding:1px 3px!important}
+  main{padding:12px;max-width:100%}
+  .card{padding:12px;margin:10px 0}
+  button{width:100%;padding:1px 3px!important}
+  .icon-btn{width:32px;height:32px}
+  .hamburger{width:36px;height:36px}
+  #status{display:none}
+  ul{grid-template-columns:1fr}
+  table{font-size:1rem}
+  th,td{padding:6px}
+  .kv{grid-template-columns:1fr;gap:6px}
+  .status-button-wrapper{width:60px;align-items:center}
+  .status-button{width:100%;padding:1px 3px!important;min-width:10px;font-size:1.3rem}
+  .status-button svg{width:16px;height:16px}
+  .status-button-label{font-size:14px;margin-top:4px}
+  #buttons-container{flex-direction:column}
+  #buttons-container > div{flex-direction:column}
+  #status-buttons-section{flex-direction:row;gap:10px;padding:10px 12px;flex-wrap:wrap;justify-content:flex-start;width:100%}
+  #right-side-section{width:100%;padding:10px 12px}
+  .stopwatch-box{min-width:50px;padding:6px 10px}
+  .stopwatch-number{font-size:20px}
+  .stopwatch-label{font-size:9px}
+  .stopwatch-separator{font-size:20px}
+  #htx-actions-section{flex-direction:row;gap:10px;width:100%;justify-content:center}
+  .htx-action-button{padding:1px 3px!important;font-size:1.2rem;width:auto}
+  .modal-card{width:100%;max-height:85vh;border-radius:10px}
+  .modal-header{padding:10px 12px;font-size:1.4rem}
+  .modal-header button{width:auto;padding:1px 3px!important;font-size:1.2rem}
+  .modal-body{padding:10px}
+  .kv{grid-template-columns:1fr;gap:5px}
+  .kv .muted{font-size:1.2rem}
+  .kv input{padding:8px;font-size:1.3rem}
+  #details-content{font-size:1.3rem}
+  #filters-card{padding:12px}
+  #checkbox-filters-container{flex-wrap:wrap}
+  #checkbox-filters-container label{font-size:1.3rem}
+  .drawer .panel{width:80vw;max-width:300px}
+#rows-card{overflow-x:auto}
+#rows{min-width:600px}
+table{font-size:1.2rem}
+th,td{padding:5px 6px}
+#rows th,#rows td{font-size:1.2rem}
+#rows button{padding:1px 3px!important;font-size:1.2rem;gap:4px;width:auto;border-radius:8px}
+#rows button svg{width:14px;height:14px}
+.group-header-cell{font-size:1rem;padding:8px 6px}
+  @media (max-width:400px){
+  #status-buttons-section{flex-direction:row;flex-wrap:nowrap;gap:8px;padding:10px 12px;justify-content:flex-start;overflow-x:auto}
+  #htx-actions-section{flex-direction:row;flex-wrap:nowrap;gap:8px;padding:10px 12px;justify-content:flex-start;overflow-x:auto}
+  .status-button-wrapper{width:60px;align-items:center}
+      .status-button{min-width:10px;width:60px;padding:1px 3px!important}
+  .status-button-label{font-size:12px;margin-top:4px}
+      .htx-action-button{padding:1px 3px!important;font-size:1.1rem}
+}
+}
+
+/* GPS Status Indicator Styles */
+.gps-status {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 6px;
+  text-align: center;
+  transition: all 0.3s ease;
+  margin: 8px 12px;
+}
+
+.gps-status.active {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+}
+
+.gps-status.active.good {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
+}
+
+.gps-status.active.medium {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde047;
+}
+
+.gps-status.active.poor {
+  background: #fed7aa;
+  color: #9a3412;
+  border: 1px solid #fdba74;
+}
+
+.gps-status.active.very-poor {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.gps-status.inactive {
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+}
+    

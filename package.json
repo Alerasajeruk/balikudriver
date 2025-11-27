@@ -1,0 +1,23 @@
+{
+  "name": "baliku-driver",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:driver && npm run build:admin",
+    "build:driver": "node scripts/build-client.js driver",
+    "build:admin": "node scripts/build-client.js admin",
+    "build:all": "npm run build && npm run deploy:prepare",
+    "deploy:prepare": "npm run build && node scripts/copy-frontend-to-public.js && node scripts/update-api-base.js",
+    "deploy": "npm run deploy:prepare && vercel --prod",
+    "dev": "cd apps/baliku-driver-server && npm run dev",
+    "clean": "node scripts/clean-build.js"
+  },
+  "workspaces": [
+    "apps/*"
+  ],
+  "devDependencies": {
+    "esbuild": "^0.19.12",
+    "vercel": "^34.0.0"
+  }
+}

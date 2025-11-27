@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0ea5e9" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <title>Baliku Driver</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Preline UI -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.min.css" />
+    <link rel="stylesheet" href="styles/main.css" />
+  </head>
+  <body>
+    <div id="login-screen" class="hidden">
+      <div class="login-card">
+        <div class="login-header"></div>
+        <div class="login-body">
+          <h2>LOGIN</h2>
+          <div class="login-role-group">
+            <button type="button" class="login-role-btn active" data-role="driver">
+              <span>Driver</span>
+              <input type="checkbox" class="role-checkbox" checked />
+            </button>
+            <button type="button" class="login-role-btn" data-role="guide">
+              <span>Guide</span>
+              <input type="checkbox" class="role-checkbox" />
+            </button>
+          </div>
+          <label>
+            <div class="login-input-wrapper">
+              <svg class="login-input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <input type="text" id="login-name" list="login-name-options" placeholder="Username" autocomplete="off" />
+            </div>
+          </label>
+          <datalist id="login-name-options"></datalist>
+          <label>
+            <div class="login-input-wrapper">
+              <svg class="login-input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <input type="password" id="login-password" placeholder="Password" autocomplete="off" />
+            </div>
+          </label>
+          <button id="login-submit" disabled>LOG IN</button>
+          <div id="login-status"></div>
+        </div>
+      </div>
+    </div>
+    <header>
+      <button id="btn-hamburger" class="hamburger" aria-label="Open menu" title="Menu">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+      <div style="flex:1">Baliku Driver</div>
+      <button id="refresh" title="Sync" style="display:inline-flex;align-items:center;gap:6px">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+          <path d="M21 3v5h-5"/>
+          <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+          <path d="M8 16H3v5"/>
+        </svg>
+        <span>Sync</span>
+      </button>
+      <span id="status" class="muted" style="margin-left:8px"></span>
+    </header>
+    <div id="app-drawer" class="drawer" aria-hidden="true">
+      <div class="overlay"></div>
+      <div class="panel">
+        <div style="padding:16px;border-bottom:1px solid #1f2a44;display:flex;justify-content:space-between;align-items:center">
+          <strong>Menu</strong>
+          <button id="btn-drawer-close" class="icon-btn" aria-label="Close menu" title="Close">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        <div style="padding:12px 16px;display:flex;flex-direction:column;gap:10px">
+          <button id="menu-order-schedule">Order Schedule</button>
+          <button id="menu-services">Services</button>
+          <button id="menu-driver">Driver List</button>
+          <button id="menu-guide">Guide List</button>
+          <button id="menu-car">Car List</button>
+          <button id="menu-places">Places</button>
+          <button id="menu-agency">Agency</button>
+          <button id="menu-pricelist">Pricelist</button>
+          <button id="menu-pending-order">Pending Order</button>
+        </div>
+        <div style="padding:16px;border-top:1px solid #1f2a44;display:flex;justify-content:space-between;align-items:center">
+          <strong>Settings</strong>
+        </div>
+        <div style="padding:12px 16px;display:flex;flex-direction:column;gap:8px">
+          <button id="btn-database">Database</button>
+          <button id="btn-api-connection">API Connection</button>
+        </div>
+        <div style="padding:12px 16px;border-top:1px solid #1f2a44">
+          <button id="btn-logout" style="width:100%;background:#dc2626">Logout</button>
+        </div>
+      </div>
+    </div>
+    <main>
+      <div class="card" id="filters-card">
+        <h3 id="filters-title">Order filters</h3>
+        <div style="display:flex;gap:12px;align-items:flex-end">
+          <div style="width:50%;flex:0 0 50%">
+            <label>
+              
+              <input type="text" id="search-filter" placeholder="Search" style="width:70%;padding:8px;border-radius:8px;border:1px solid #1f2a44;background:#0b1225;color:#e6edf3" />
+            </label>
+          </div>
+          <div id="checkbox-filters-container" style="width:50%;flex:0 0 50%;display:flex;gap:12px;align-items:center">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer" id="checkbox-48-hours-label">
+              <input type="checkbox" id="checkbox-48-hours" />
+              <span class="muted">48 Hours</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer" id="checkbox-7-days-label">
+              <input type="checkbox" id="checkbox-7-days" />
+              <span class="muted">7 Days</span>
+            </label>
+            <label style="display:none;align-items:center;gap:6px;cursor:pointer" id="checkbox-pcon-label">
+              <input type="checkbox" id="checkbox-pcon" />
+              <span class="muted">PCON</span>
+            </label>
+            <label style="display:none;align-items:center;gap:6px;cursor:pointer" id="checkbox-pamm-label">
+              <input type="checkbox" id="checkbox-pamm" />
+              <span class="muted">PAMM</span>
+            </label>
+            <label style="display:none;align-items:center;gap:6px;cursor:pointer" id="checkbox-pcan-label">
+              <input type="checkbox" id="checkbox-pcan" />
+              <span class="muted">PCAN</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card" id="rows-card" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <h3 id="rows-title" style="margin:0">Rows</h3>
+          <div class="rows-actions" style="display:flex;gap:8px;align-items:center">
+            <button id="add-row-btn">Add</button>
+          </div>
+        </div>
+        <div style="overflow:auto">
+          <table id="rows"></table>
+        </div>
+      </div>
+    </main>
+    <div id="details-modal" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none bg-gray-900 bg-opacity-50 dark:bg-opacity-80" aria-hidden="true">
+      <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto pointer-events-auto">
+        <div class="bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-gray-800 dark:border-gray-700" onclick="event.stopPropagation()">
+          <div class="flex justify-between items-center py-3 px-4 border-b dark:border-gray-700">
+            <h3 class="font-bold text-gray-800 dark:text-white" id="details-modal-title">Row Details</h3>
+            <div class="flex gap-2 items-center">
+              <button type="button" id="details-edit" class="hs-dropdown-toggle py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800">
+                Edit
+              </button>
+              <button type="button" id="details-save" style="display:none" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
+                Save
+              </button>
+              <button type="button" id="details-cancel" style="display:none" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800">
+                Cancel
+              </button>
+              <button type="button" id="details-delete" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 disabled:pointer-events-none">
+                Delete
+              </button>
+              <button type="button" id="details-close" class="flex justify-center items-center size-7 text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" aria-label="Close">
+                <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m18 6-12 12"></path>
+                  <path d="m6 6 12 12"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div id="buttons-container" style="display:none" class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+            <div class="p-4 flex gap-4">
+              <!-- Left side: Toggle switches -->
+              <div id="status-buttons-section" style="display:none" class="flex flex-wrap gap-3 flex-1">
+                <div class="status-toggle-wrapper flex flex-col items-center">
+                  <label class="status-toggle-label">
+                    <input type="checkbox" class="status-toggle-input" data-status-value="BEFORE_PICKUP" />
+                    <span class="status-toggle-slider"></span>
+                  </label>
+                  <span class="status-toggle-text">Before Pickup</span>
+                </div>
+                <div class="status-toggle-wrapper flex flex-col items-center">
+                  <label class="status-toggle-label">
+                    <input type="checkbox" class="status-toggle-input" data-status-value="WAITING_FOR_CUSTOMER" />
+                    <span class="status-toggle-slider"></span>
+                  </label>
+                  <span class="status-toggle-text">Wait A Guest</span>
+                </div>
+                <div class="status-toggle-wrapper flex flex-col items-center">
+                  <label class="status-toggle-label">
+                    <input type="checkbox" class="status-toggle-input" data-status-value="AFTER_PICKUP" />
+                    <span class="status-toggle-slider"></span>
+                  </label>
+                  <span class="status-toggle-text">After Pickup</span>
+                </div>
+                <div class="status-toggle-wrapper flex flex-col items-center">
+                  <label class="status-toggle-label">
+                    <input type="checkbox" class="status-toggle-input" data-status-value="COMPLETED" />
+                    <span class="status-toggle-slider"></span>
+                  </label>
+                  <span class="status-toggle-text">Completed</span>
+                </div>
+              </div>
+              <!-- Right side: Stopwatch timer and HTX buttons -->
+              <div id="right-side-section" style="display:none" class="flex flex-col items-center gap-4 min-w-[200px]">
+                <!-- Stopwatch Timer -->
+                <div id="stopwatch-container" class="flex flex-col items-center gap-2">
+                  <div class="text-xs text-gray-600 dark:text-gray-400 font-semibold">ELAPSED TIME</div>
+                  <div id="stopwatch-display" class="flex gap-2 items-center justify-center">
+                    <div class="stopwatch-box">
+                      <div id="stopwatch-hours" class="stopwatch-number">00</div>
+                      <div class="stopwatch-label">HOURS</div>
+                    </div>
+                    <div class="stopwatch-separator">:</div>
+                    <div class="stopwatch-box">
+                      <div id="stopwatch-minutes" class="stopwatch-number">00</div>
+                      <div class="stopwatch-label">MINUTES</div>
+                    </div>
+                    <div class="stopwatch-separator">:</div>
+                    <div class="stopwatch-box">
+                      <div id="stopwatch-seconds" class="stopwatch-number">00</div>
+                      <div class="stopwatch-label">SECONDS</div>
+                    </div>
+                  </div>
+                </div>
+                <!-- HTX Action Buttons -->
+                <div id="htx-actions-section" class="flex flex-col gap-2 w-full">
+                  <button type="button" class="htx-action-button py-2.5 px-4 inline-flex items-center justify-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-pink-600 text-white hover:bg-pink-700 disabled:opacity-50 disabled:pointer-events-none" id="btn-send-to-htx" title="Send to HTX">SEND TO HTX</button>
+                  <button type="button" class="htx-action-button py-2.5 px-4 inline-flex items-center justify-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 disabled:pointer-events-none" id="btn-change-car" title="Change Car">CHANGE CAR</button>
+                  <button type="button" class="htx-action-button py-2.5 px-4 inline-flex items-center justify-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-orange-600 text-white hover:bg-orange-700 disabled:opacity-50 disabled:pointer-events-none" id="btn-reset-timer" title="Reset Timer">RESET TIMER</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="pending-buttons-section" style="display:none" class="p-4 flex flex-wrap gap-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+            <div class="status-button-wrapper flex flex-col items-center">
+              <button class="status-button w-14 h-14 inline-flex justify-center items-center gap-x-2 rounded-lg border border-transparent bg-yellow-400 text-gray-800 hover:bg-yellow-500 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600 shadow-sm" title="ACON" data-pending-action="ACON">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 6L9 17l-5-5"/>
+                </svg>
+              </button>
+              <span class="text-xs text-gray-600 dark:text-gray-400 mt-1">ACON</span>
+            </div>
+            <div class="status-button-wrapper flex flex-col items-center">
+              <button class="status-button w-14 h-14 inline-flex justify-center items-center gap-x-2 rounded-lg border border-transparent bg-yellow-400 text-gray-800 hover:bg-yellow-500 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600 shadow-sm" title="AAMM" data-pending-action="AAMM">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 6L9 17l-5-5"/>
+                </svg>
+              </button>
+              <span class="text-xs text-gray-600 dark:text-gray-400 mt-1">AAMM</span>
+            </div>
+            <div class="status-button-wrapper flex flex-col items-center">
+              <button class="status-button w-14 h-14 inline-flex justify-center items-center gap-x-2 rounded-lg border border-transparent bg-yellow-400 text-gray-800 hover:bg-yellow-500 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600 shadow-sm" title="ACAN" data-pending-action="ACAN">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 6L9 17l-5-5"/>
+                </svg>
+              </button>
+              <span class="text-xs text-gray-600 dark:text-gray-400 mt-1">ACAN</span>
+            </div>
+            <div class="status-button-wrapper flex flex-col items-center">
+              <button class="status-button w-14 h-14 inline-flex justify-center items-center gap-x-2 rounded-lg border border-transparent bg-yellow-400 text-gray-800 hover:bg-yellow-500 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600 shadow-sm" title="Action 4" data-pending-action="ACTION4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 6L9 17l-5-5"/>
+                </svg>
+              </button>
+              <span class="text-xs text-gray-600 dark:text-gray-400 mt-1">Action 4</span>
+            </div>
+          </div>
+          <div id="details-content" class="p-4 overflow-y-auto"></div>
+          <div id="gps-status" class="gps-status inactive" style="display:none;padding:8px 12px;margin:8px 12px;border-radius:6px;font-size:12px;text-align:center;background:#f3f4f6;color:#6b7280;"></div>
+        </div>
+      </div>
+    </div>
+    <div id="database-modal" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none" aria-hidden="true">
+      <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto">
+        <div class="bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-gray-800 dark:border-gray-700" onclick="event.stopPropagation()">
+          <div class="flex justify-between items-center py-3 px-4 border-b dark:border-gray-700">
+            <h3 class="font-bold text-gray-800 dark:text-white">Database Configuration</h3>
+            <div class="flex gap-2 items-center">
+              <button type="button" id="db-edit" class="hs-dropdown-toggle py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800">Edit</button>
+              <button type="button" id="db-save" style="display:none" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">Save</button>
+              <button type="button" id="db-cancel" style="display:none" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800">Cancel</button>
+              <button type="button" id="db-close" class="flex justify-center items-center size-7 text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" aria-label="Close">
+                <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m18 6-12 12"></path>
+                  <path d="m6 6 12 12"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div id="database-content" class="p-4 overflow-y-auto"></div>
+        </div>
+      </div>
+    </div>
+    <div id="api-modal" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none" aria-hidden="true">
+      <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto">
+        <div class="bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-gray-800 dark:border-gray-700" onclick="event.stopPropagation()">
+          <div class="flex justify-between items-center py-3 px-4 border-b dark:border-gray-700">
+            <h3 class="font-bold text-gray-800 dark:text-white">API Connection</h3>
+            <div class="flex gap-2 items-center">
+              <button type="button" id="api-edit" class="hs-dropdown-toggle py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800">Edit</button>
+              <button type="button" id="api-save" style="display:none" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">Save</button>
+              <button type="button" id="api-cancel" style="display:none" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800">Cancel</button>
+              <button type="button" id="api-close" class="flex justify-center items-center size-7 text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" aria-label="Close">
+                <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m18 6-12 12"></path>
+                  <path d="m6 6 12 12"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div id="api-content" class="p-4 overflow-y-auto"></div>
+        </div>
+      </div>
+    </div>
+    <div id="status-confirm-modal" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none" aria-hidden="true">
+      <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto max-w-sm">
+        <div class="bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-gray-800 dark:border-gray-700">
+          <div class="flex justify-between items-center py-3 px-4 border-b dark:border-gray-700">
+            <h3 class="font-bold text-gray-800 dark:text-white">Confirmation</h3>
+            <button type="button" id="status-confirm-close" class="flex justify-center items-center size-7 text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" aria-label="Close">
+              <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m18 6-12 12"></path>
+                <path d="m6 6 12 12"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="p-4 flex flex-col gap-4">
+            <div id="status-confirm-message" class="text-sm text-gray-800 dark:text-gray-200">Do you want to update location ?</div>
+            <div class="flex justify-end gap-2">
+              <button type="button" id="status-confirm-no" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800">No</button>
+              <button type="button" id="status-confirm-yes" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">Yes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="pending-confirm-modal" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none" aria-hidden="true">
+      <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto max-w-sm">
+        <div class="bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-gray-800 dark:border-gray-700">
+          <div class="flex justify-between items-center py-3 px-4 border-b dark:border-gray-700">
+            <h3 class="font-bold text-gray-800 dark:text-white">Confirmation</h3>
+            <button type="button" id="pending-confirm-close" class="flex justify-center items-center size-7 text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" aria-label="Close">
+              <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m18 6-12 12"></path>
+                <path d="m6 6 12 12"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="p-4 flex flex-col gap-4">
+            <div id="pending-confirm-message" class="text-sm text-gray-800 dark:text-gray-200">Are you sure?</div>
+            <div class="flex justify-end gap-2">
+              <button type="button" id="pending-confirm-no" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800">No</button>
+              <button type="button" id="pending-confirm-yes" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">Yes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="toast" class="toast" role="status"></div>
+    <!-- Preline UI JS -->
+    <script src="https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.min.js"></script>
+    <script src="scripts/app.js"></script>
+  </body>
+  </html>
+
+
