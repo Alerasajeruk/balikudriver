@@ -1,5 +1,4 @@
 {
-  "version": 3,
   "buildCommand": "npm run build:all",
   "outputDirectory": "driver",
   "functions": {
@@ -39,5 +38,8 @@
       "source": "/service-worker.js",
       "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
     }
-  ]
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
 }
